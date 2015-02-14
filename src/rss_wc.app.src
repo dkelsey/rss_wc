@@ -2,7 +2,7 @@
 	{description, "RSS Word Count Worker"},
 	{vsn, "0.1.0"},
 	{id, "git"},
-	{modules, [rss_wc_app, rss_wc_sup, rss_wc]},
+	{modules, []},
 	{registered, [rss_wc_app]},
 	{applications, [
 		kernel,
