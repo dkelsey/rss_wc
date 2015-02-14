@@ -1,0 +1,9 @@
+{application,rss_wc,
+             [{description,[]},
+              {vsn,"0.1.0"},
+              {id,"git"},
+              {modules,[rss_wc_app,rss_wc_sup]},
+              {registered,[]},
+              {applications,[kernel,stdlib]},
+              {mod,{rss_wc_app,[]}},
+              {env,[]}]}.

@@ -1,0 +1,19 @@
+{application, rss_wc, [
+	{description, "RSS Word Count Worker"},
+	{vsn, "0.1.0"},
+	{id, "git"},
+	{modules, [rss_wc_app, rss_wc_sup, rss_wc]},
+	{registered, [rss_wc_app]},
+	{applications, [
+		kernel,
+		stdlib,
+		jiffy
+	]},
+	{mod, {rss_wc_app, []}},
+	{env, 
+	[{search_path, "//items/description/text()"},
+	 {token_string, "= "},
+	 {count_limit, 10},
+	 {stopwords_file, "./stopwords.txt"}
+	 ]}
+]}.
