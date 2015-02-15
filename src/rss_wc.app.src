@@ -1,9 +1,9 @@
 {application, rss_wc, [
-	{description, "RSS Word Count Worker"},
+	{description, "RSS Word Count Application"},
 	{vsn, "0.1.0"},
 	{id, "git"},
 	{modules, []},
-	{registered, [rss_wc_app]},
+	{registered, [rss_wc]},
 	{applications, [
 		kernel,
 		stdlib,
