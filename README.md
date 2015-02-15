@@ -16,7 +16,7 @@ The worker performs each stage in sequence by submitting asynchronous calls to i
 * decodes the URI
 * gets the XML using `inets/httpc`
 * parses the XML using `xmerl` and extracts the relevant data as text
-* parses (normalizes) the resulting text into lower case
+* parses (normalizes) the resulting text into lower case and filter chars above 255 to '?' (65) 
 * tokenize the text 
 * filters the resulting tokens from a stopwords list : the count of filtered words is used later
 * counts the occurrence of each word
