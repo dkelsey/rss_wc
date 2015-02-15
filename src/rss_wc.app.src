@@ -11,7 +11,7 @@
 	]},
 	{mod, {rss_wc_app, []}},
 	{env, 
-	[{search_path, "//items/description/text()"},
+	[{search_path, "//item/description/text()"},
 	 {token_string, "= "},
 	 {count_limit, 10},
 	 {stopwords_file, "./stopwords.txt"}

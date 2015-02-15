@@ -1152,6 +1152,7 @@ help::
 # Plugin-specific targets.
 
 EUNIT_RUN = $(ERL) \
+	-DTEST \
 	-pa $(TEST_DIR) $(DEPS_DIR)/*/ebin \
 	-pz ebin \
 	-eval 'case eunit:test([$(call str-join,$(TAGGED_EUNIT_TESTS))], [$(EUNIT_OPTS)]) of ok -> halt(0); error -> halt(1) end.'
