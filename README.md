@@ -46,10 +46,12 @@ git clone https://github.com/dkelsey/rss_wc.git
 cd rss_wc
 make clean app
 ...
-```
+...
 
-```
 erl -pa ./ebin -pa ./deps/*/ebin
+Erlang/OTP 17 \[erts-6.3] \[source-f9282c6] \[64-bit] \[smp:4:4] \[async-threads:10] \[hipe] \[kernel-poll:false]
+
+Eshell V6.3  (abort with ^G)
 1> application:start(jiffy),applicaion:start(rss_wc).
 ok
 2> rss_wc:decode_uri(<<"http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FHomePage.xml">>).
@@ -61,9 +63,13 @@ ok
 4>
 ```
 
-#Useage
+#Usage
  
 ```
+erl -pa ./ebin -pa ./deps/*/ebin
+Erlang/OTP 17 \[erts-6.3] \[source-f9282c6] \[64-bit] \[smp:4:4] \[async-threads:10] \[hipe] \[kernel-poll:false]
+
+Eshell V6.3  (abort with ^G)
 1> application:start(jiffy), application:start(rss_wc).
 ok
 2> rss_wc:decode_uri(<<"http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FHomePage.xml">>).
@@ -74,7 +80,7 @@ Shell got {#Ref<0.0.0.58>,
 ok
 ```
 
-#Dependancies
+#Dependencies
  
 * jiffy
 
