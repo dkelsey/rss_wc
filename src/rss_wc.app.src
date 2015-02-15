@@ -2,7 +2,7 @@
 	{description, "RSS Word Count Application"},
 	{vsn, "0.1.0"},
 	{id, "git"},
-	{modules, []},
+	{modules, [rss_wc,rss_wc_app,rss_wc_sub]},
 	{registered, [rss_wc]},
 	{applications, [
 		kernel,
