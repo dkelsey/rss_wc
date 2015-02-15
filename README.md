@@ -45,17 +45,27 @@ cd project
 git clone https://github.com/dkelsey/rss_wc.git
 cd rss_wc
 make clean app
+...
+```
+
+```
 erl -pa ./ebin -pa ./deps/*/ebin
-application:start(jiffy),applicaion:start(rss_wc).
+1> application:start(jiffy),applicaion:start(rss_wc).
 ok
-rss_wc:decode_uri().
-flush().
+2> rss_wc:decode_uri(<<"http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FHomePage.xml">>).
+ok
+3> flush().
+Shell got {#Ref<0.0.0.58>,
+           {ok,<<"{\"words\":[{\"word\":\"border\",\"count\":65},{\"word\":\"src\",\"count\":65},{\"word\":\"'1'\",\"count\":40},{\"word\":\"href\",\"count\":36},{\"word\":\"height\",\"count\":29},{\"word\":\"width\",\"count\":29},{\"word\":\"\\\"nofollow\\\"><img\",\"count\":27},{\"word\":\"rel\",\"count\":27},{\"word\":\"'0'/><br\",\"count\":20},{\"word\":\"clear\",\"count\":20}],\"stopWordsIgnored\":175}">>}}
+ok
+4>
 ```
 
 #Useage
  
 ```
 1> application:start(jiffy), application:start(rss_wc).
+ok
 2> rss_wc:decode_uri(<<"http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FHomePage.xml">>).
 ok
 3> flush().
