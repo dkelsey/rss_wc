@@ -33,8 +33,8 @@ These are:
 | ------- | ----- | ------- |
 | stopwords_file | "stopwords.txt" | file containing stopwords |
 | token_string | "= " | the characters to tokenize text data on |
-| xml_search_path | "//items/description/text()" | the filed to use for the word count |
-| limit | 10 | the amount to limit by in the result e.g. top 10 |
+| search_path | "//item/description/text()" | the filed to use for the word count |
+| count_limit | 10 | the amount to limit by in the result e.g. top 10 |
 
  
 #Installation

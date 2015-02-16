@@ -13,7 +13,7 @@
 
 
 decode_uri_test() ->
-	% rss_wc:decode_uri(<<"http%3A%2F%2Fdigg.com%2Frss%2Ftop.xml">>).
+	% rss_wc:decode_uri(<<"http%3A%2F%2Fdigg.com%2Frss%2Ftop.rss">>).
 	% rss_wc:decode_uri(<<"http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FHomePage.xml">>).
 	Uri = <<"http%3A%2F%2Frss.nytimes.com%2Fservices%2Fxml%2Frss%2Fnyt%2FHomePage.xml">>,
 	{ok, DecodedUri} = rss_wc:do_decode_uri(Uri),

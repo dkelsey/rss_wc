@@ -43,7 +43,7 @@ decode_uri(Uri) ->
 
 init([]) ->
 	ets:new(cache, [set, named_table]),
-	inets:start(),
+%	inets:start(),
 	{ok, TokenString} = application:get_env(?MODULE, token_string),
 	{ok, Limit} = application:get_env(?MODULE, count_limit),
 	{ok, SearchPath} = application:get_env(?MODULE, search_path),
