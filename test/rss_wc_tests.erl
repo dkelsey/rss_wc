@@ -29,15 +29,15 @@ get_uri_test() ->
 parse_xml_test() ->
 	{ok, XMLBody} = file:read_file("test/data/NYT_HomePage.xml"),
 	{ok, Text} = rss_wc:do_parse_xml(binary_to_list(XMLBody), "//item/description/text()"),
-	?debugFmt("XMLBody length: ~b~n", [erlang:length(binary_to_list(XMLBody))]),
-	?debugFmt("Text length: ~b~n", [erlang:length(Text)]),
+%	?debugFmt("XMLBody length: ~b~n", [erlang:length(binary_to_list(XMLBody))]),
+%	?debugFmt("Text length: ~b~n", [erlang:length(Text)]),
 	?assert(erlang:length(Text) > 5).
 
 parse_text_test() -> 
 	{ok, Text} = file:read_file("test/data/TextData.txt"),
 	{ok, FilteredText} = rss_wc:do_parse_text(binary_to_list(Text)),
-	?debugFmt("~nText length: ~p", [erlang:length(binary_to_list(Text))]),
-	?debugFmt("~nFilteredText length: ~b", [erlang:length(FilteredText)]),
+%	?debugFmt("~nText length: ~p", [erlang:length(binary_to_list(Text))]),
+%	?debugFmt("~nFilteredText length: ~b", [erlang:length(FilteredText)]),
 %	?debugFmt("Text: ~s~n", [Text]),
 %	?debugFmt("NewTokens ~s~n", [NewTokens]),
 	?assert(erlang:length(FilteredText) > 0),
@@ -46,8 +46,8 @@ parse_text_test() ->
 tokenize_text_test() ->
 	{ok, Text} = file:read_file("test/data/ParsedText.txt"),
 	{ok, Tokens} = rss_wc:do_tokenize_text(binary_to_list(Text), " ="),
-	?debugFmt("Text length: ~b~n", [erlang:length(binary_to_list(Text))]),
-	?debugFmt("Tokens length: ~b~n", [erlang:length(Tokens)]),
+%	?debugFmt("Text length: ~b~n", [erlang:length(binary_to_list(Text))]),
+%	?debugFmt("Tokens length: ~b~n", [erlang:length(Tokens)]),
 	?assert(erlang:length(Tokens) > 0).
 
 filter_stopwords_test() -> ok.

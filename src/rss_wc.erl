@@ -43,7 +43,7 @@ decode_uri(Uri) ->
 
 init([]) ->
 	ets:new(cache, [set, named_table]),
-%	inets:start(),
+%	inets:start(), % This was causing the release to fail to start.
 	{ok, TokenString} = application:get_env(?MODULE, token_string),
 	{ok, Limit} = application:get_env(?MODULE, count_limit),
 	{ok, SearchPath} = application:get_env(?MODULE, search_path),
@@ -141,7 +141,6 @@ do_decode_uri(Uri) ->
 	{ok, DecodedUri}.
 do_get_uri(DecodedUri) ->
 	{ok, {{_Version, 200, _ReasonPhrase}, _Headers, XMLBody}} = httpc:request(DecodedUri),
-%	io:format("~s", [XMLBody]),
 	{ok, XMLBody}.
 do_parse_xml(XMLBody, SearchPath) ->
 	{XML_Body, _RemainingText = "" } = xmerl_scan:string(XMLBody),	
@@ -157,12 +156,6 @@ do_tokenize_text(Text, TokenString) ->
 	Tokens = string:tokens(Text, TokenString),
 	{ok, Tokens}.
 do_filter_stopwords(Tokens) ->
-%	{ok, StopwordsFile} = application:get_env(?MODULE, stopwords_file),
-%	{ok, StopWords} = file:read_file(StopwordsFile),
-%	StopTokens = string:tokens( binary_to_list(StopWords), "\n"),
-%	StopWordsList = lists:flatmap(fun(X) -> [{X,0}] end, StopTokens),   % results in [{"a",0},{"b",0}]
-%	ets:new(stopwords, [set, named_table]),
-%	ets:insert(stopwords, StopWordsList),
 %  Copy the stopwords ets set [{"a",0},{"b",0},{"c",0},...]
 	StopWords = ets:tab2list(stopwords),
 %	NewStopWords = [{K,0} || {K,_} <- StopWords],
@@ -170,7 +163,7 @@ do_filter_stopwords(Tokens) ->
 	ets:insert(TempTable, StopWords),
 	F = fun(X) -> case ets:lookup(TempTable, X) of [] -> [X]; [{X,V}] -> ets:insert(TempTable, {X,V+1}), [] end end,
 	StrippedTokens = lists:flatmap(F, Tokens),
-	StopwordCounts = ets:tab2list(TempTable), % the stopwords ets should now contain counts 
+	StopwordCounts = ets:tab2list(TempTable),
 	ets:delete(TempTable), 
 	{ok, StrippedTokens, StopwordCounts}.
 do_count_tokens(Tokens) ->
@@ -181,14 +174,14 @@ do_count_tokens(Tokens) ->
 	ets:delete(group),
 	{ok, CountedTokens}.
 do_sort_tokens(CountedTokens) ->
-% Counts = [{"src", 75}, {"border",75}, {"href",44}...]
+% example CountedTokens = [{"src", 75}, {"border",75}, {"href",44}...]
 	TempTable = ets:new(groupedsorted, [ordered_set]),
 	SortByValFun = fun({Key, Val}) -> case ets:lookup(TempTable, Val) of [] -> ets:insert(TempTable, [{Val, [Key]}]), []; [{Val, Vec}] -> ets:insert(TempTable, [{Val, [Key|Vec]}]), [] end end,
 	_ = lists:flatmap(SortByValFun, CountedTokens),
 	InverseList = ets:tab2list(TempTable),
 	ets:delete(TempTable),
-% InverseList should now be [{75, ["src","border"]}, {44, ["href",...]},...]
-% InverseList will not be sorted by Key.
+% InverseList should now be [{75, ["src","border"]}, {44, ["href","meow",...]},...]
+% InverseList will be sorted by Key.
 	SortByKeyFun = fun({A, _Al} ,{B, _Bl}) -> A > B end,
 	SortedInverseList = lists:sort(SortByKeyFun,InverseList),
 % SortedInverseList is now sorted by Key
@@ -200,7 +193,6 @@ do_sort_tokens(CountedTokens) ->
 	SortedCounts = lists:append(TokenCountSortedLists),
 	{ok, SortedCounts}.
 do_limit_tokens(Counts, CountLimit) ->
-%	{ok, CountLimit} = application:get_env(?MODULE, count_limit),
 	LimitedCounts = lists:sublist(Counts, CountLimit),
 	{ok, LimitedCounts}.
 do_format_to_json(SortedTokens, StopwordsCount) ->
