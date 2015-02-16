@@ -50,11 +50,46 @@ tokenize_text_test() ->
 %	?debugFmt("Tokens length: ~b~n", [erlang:length(Tokens)]),
 	?assert(erlang:length(Tokens) > 0).
 
+% This needs to be reworked to be testable
 filter_stopwords_test() -> ok.
-count_tokens_test() -> ok.
-sort_tokens_test() -> ok.
-limit_tokens_test() -> ok.
-format_to_json_test() -> ok.
+%	rss_wc:init([]),
+%	{ok, Tokens} = file:consult("test/data/tokens"),
+%	{ok, [FilteredTokens, StopwordsCounts]} = rss_wc:do_filter_stopwords(Tokens),
+%	rss_wc:terminate([], []),
+%	?debugFmt("Tokens length: ~b~n", [erlang:length(Tokens)]),
+%	?debugFmt("NewFilteredTokens length: ~b~n", [erlang:length(FilteredTokens)]),
+%	?debugFmt("NewStopwordsCount length: ~b~n", [erlang:length(StopwordsCounts)]),
+%			[?assert(erlang:length(FilteredTokens) > 0)].
+
+count_tokens_test() ->
+	{ok, Tokens} = file:consult("test/data/FilteredTokens"),
+	{ok, CountedTokens } = rss_wc:do_count_tokens(Tokens),
+%	?debugFmt("Tokens length: ~b~n", [erlang:length(Tokens)]),
+%	?debugFmt("CountedTokens length: ~b~n", [erlang:length(CountedTokens)]),
+	%	?debugFmt("~p", [NewCountedTokens]),
+	[?assert(erlang:length(CountedTokens) > 0)].
+
+sort_tokens_test() -> 
+	{ok, CountedTokens} = file:consult("test/data/CountedTokens"),
+	{ok, SortedTokens} = rss_wc:do_sort_tokens(CountedTokens),
+	[?assert(erlang:length(CountedTokens) =:= erlang:length(SortedTokens))].
+
+limit_tokens_test() ->
+	{ok, SortedTokens} = file:consult("test/data/SortedTokens"),
+	Limit = 10,
+	{ok, LimitedSortedTokens} = rss_wc:do_limit_tokens(SortedTokens, Limit),
+%	?debugFmt("LimitedSortedTokens lenght: ~b", [erlang:length(LimitedSortedTokens)]),
+%	?debugFmt("~p", [LimitedSortedTokens]),
+	[?assert(Limit =:= erlang:length(LimitedSortedTokens))].
+
+format_to_json_test() -> 
+	% this needs sorted results as well as a count of ignored stopwords
+    {ok, StopwordsCount} = file:consult("test/data/StopwordsCount"),
+	{ok, LimitedSortedTokens} = file:consult("test/data/LimitedSortedTokens"),
+    StopwordsTotal = lists:foldl(fun({_, X}, Sum) -> X + Sum end, 0, StopwordsCount),
+	{ok, JSON_String} = rss_wc:do_format_to_json(LimitedSortedTokens, StopwordsCount),
+%	?debugFmt("~s", [JSON_String]),
+	[?assert(erlang:length(binary_to_list(JSON_String)) > 5)].
 
 %% ====================================================================
 %% Internal functions

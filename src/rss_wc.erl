@@ -44,10 +44,10 @@ decode_uri(Uri) ->
 init([]) ->
 	ets:new(cache, [set, named_table]),
 %	inets:start(), % This was causing the release to fail to start.
-	{ok, TokenString} = application:get_env(?MODULE, token_string),
-	{ok, Limit} = application:get_env(?MODULE, count_limit),
-	{ok, SearchPath} = application:get_env(?MODULE, search_path),
-	{ok, StopwordsFile} = application:get_env(?MODULE, stopwords_file),
+	{ok, TokenString} = application:get_env(?MODULE, token_string, " "),
+	{ok, Limit} = application:get_env(?MODULE, count_limit, 10),
+	{ok, SearchPath} = application:get_env(?MODULE, search_path, "//item/description/text()"),
+	{ok, StopwordsFile} = application:get_env(?MODULE, stopwords_file, "stopwords"),
 	{ok, StopWords} = file:read_file(StopwordsFile),
 	ets:new(stopwords, [set, named_table]),
 	StopTokens = string:tokens( binary_to_list(StopWords), "\n"),
@@ -119,7 +119,6 @@ handle_info(_Info, State) ->
 	{noreply, State}.
 
 terminate(_Reason, _State) ->
-	io:format("performing some cleanup~n"),
 	ets:delete(cache),
 	ets:delete(stopwords),
 	ok.
