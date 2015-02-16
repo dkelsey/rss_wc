@@ -49,7 +49,7 @@ make clean app
 ...
 
 erl -pa ./ebin -pa ./deps/*/ebin
-Erlang/OTP 17 \[erts-6.3] \[source-f9282c6] \[64-bit] \[smp:4:4] \[async-threads:10] \[hipe] \[kernel-poll:false]
+Erlang/OTP 17 [erts-6.3] [source-f9282c6] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
 Eshell V6.3  (abort with ^G)
 1> application:start(jiffy),applicaion:start(rss_wc).
@@ -67,7 +67,7 @@ ok
  
 ```
 erl -pa ./ebin -pa ./deps/*/ebin
-Erlang/OTP 17 \[erts-6.3] \[source-f9282c6] \[64-bit] \[smp:4:4] \[async-threads:10] \[hipe] \[kernel-poll:false]
+Erlang/OTP 17 [erts-6.3] [source-f9282c6] [64-bit] [smp:4:4] [async-threads:10] [hipe] [kernel-poll:false]
 
 Eshell V6.3  (abort with ^G)
 1> application:start(jiffy), application:start(rss_wc).
