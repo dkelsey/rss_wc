@@ -139,8 +139,15 @@ do_decode_uri(Uri) ->
 	DecodedUri = http_uri:decode(binary_to_list(Uri)),
 	{ok, DecodedUri}.
 do_get_uri(DecodedUri) ->
-	{ok, {{_Version, 200, _ReasonPhrase}, _Headers, XMLBody}} = httpc:request(DecodedUri),
-	{ok, XMLBody}.
+	{ok, {{_Version, HTTPCode, _ReasonPhrase}, _Headers, XMLBody}} = httpc:request(DecodedUri),
+	case HTTPCode of
+		200 ->
+			{ok, XMLBody};
+		301 ->
+			{ok, XMLBody};
+		302 ->
+			{ok, XMLBody}
+	end.
 do_parse_xml(XMLBody, SearchPath) ->
 	{XML_Body, _RemainingText = "" } = xmerl_scan:string(XMLBody),	
 	XML_Items = xmerl_xpath:string(SearchPath, XML_Body),
@@ -166,11 +173,11 @@ do_filter_stopwords(Tokens) ->
 	ets:delete(TempTable), 
 	{ok, StrippedTokens, StopwordCounts}.
 do_count_tokens(Tokens) ->
-	ets:new(group, [set, named_table]),
-	Munge = fun(X) -> case ets:lookup(group, X) of [] -> ets:insert(group, [{X, 1}]), []; [{X, V}] -> ets:insert(group, [{X, V+1}]), [] end end,
+	TempTable = ets:new(group, [set]),
+	Munge = fun(X) -> case ets:lookup(TempTable, X) of [] -> ets:insert(TempTable, [{X, 1}]), []; [{X, V}] -> ets:insert(TempTable, [{X, V+1}]), [] end end,
 	_ = lists:flatmap(Munge, Tokens),
-	CountedTokens  = ets:tab2list(group),
-	ets:delete(group),
+	CountedTokens  = ets:tab2list(TempTable),
+	ets:delete(TempTable),
 	{ok, CountedTokens}.
 do_sort_tokens(CountedTokens) ->
 % example CountedTokens = [{"src", 75}, {"border",75}, {"href",44}...]

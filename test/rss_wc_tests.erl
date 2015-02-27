@@ -86,7 +86,7 @@ format_to_json_test() ->
 	% this needs sorted results as well as a count of ignored stopwords
     {ok, StopwordsCount} = file:consult("test/data/StopwordsCount"),
 	{ok, LimitedSortedTokens} = file:consult("test/data/LimitedSortedTokens"),
-    StopwordsTotal = lists:foldl(fun({_, X}, Sum) -> X + Sum end, 0, StopwordsCount),
+    _StopwordsTotal = lists:foldl(fun({_, X}, Sum) -> X + Sum end, 0, StopwordsCount),
 	{ok, JSON_String} = rss_wc:do_format_to_json(LimitedSortedTokens, StopwordsCount),
 %	?debugFmt("~s", [JSON_String]),
 	[?assert(erlang:length(binary_to_list(JSON_String)) > 5)].
